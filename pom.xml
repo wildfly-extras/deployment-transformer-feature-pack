@@ -65,6 +65,18 @@
 	
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-ee-galleon-pack</artifactId>
+                <type>zip</type>
+                <version>${version.org.wildfly}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
             <dependency>
                 <groupId>org.wildfly.core</groupId>
@@ -92,6 +104,13 @@
 			
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>wildfly-deployment-transformer-galleon-content</artifactId>
+                <type>pom</type>
+                <version>${project.version}</version>
+            </dependency>
+			
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>wildfly-ee-9-deployment-transformer</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
@@ -108,6 +127,7 @@
     <modules>
         <module>deployment-transformer</module>
         <module>galleon-content</module>
+        <module>wildfly-feature-pack</module>
     </modules>
 	
     <build>
@@ -126,6 +146,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>wildfly-assembly-plugin</artifactId>
                     <version>${version.org.apache.maven.plugins.maven-assembly-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.wildfly.galleon-plugins</groupId>
+                    <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                    <version>${version.org.wildfly.galleon-plugins}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

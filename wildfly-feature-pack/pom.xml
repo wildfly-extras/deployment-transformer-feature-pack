@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2023, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-deployment-transformer-parent</artifactId>
+        <version>1.0.0.Alpha1-SNAPSHOT</version>
+    </parent>
+    <artifactId>wildfly-deployment-transformer-feature-pack</artifactId>
+    <packaging>pom</packaging>
+    <name>EE 8 to EE 9 deployment transformation for WildFly -- Feature Pack</name>
+  
+    <description>Feature pack to provision EE 8 to EE 9 deployment transformation for WildFly</description>
+    
+    <dependencies>
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-deployment-transformer-galleon-content</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-ee-galleon-pack</artifactId>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <galleon.content.resources.directory>${basedir}/../galleon-content/target/resources</galleon.content.resources.directory>
+    </properties>
+    <build>                
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-common-feature-pack-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${galleon.content.resources.directory}</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Use copy-resources filtering to replace the GAV properties
+                             in the wildfly-user-feature-pack-build.xml file with their values. -->
+                        <id>filter-wildfly-user-feature-pack-build</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>wildfly-user-feature-pack-build.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.galleon-plugins</groupId>
+                <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wildfly-deployment-transformer-feature-pack-build</id>
+                        <goals>
+                            <goal>build-user-feature-pack</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <config-dir>${project.build.directory}</config-dir>
+                            <resources-dir>${basedir}/target/resources</resources-dir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
