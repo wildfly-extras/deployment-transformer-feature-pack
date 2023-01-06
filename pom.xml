@@ -127,6 +127,7 @@
     <modules>
         <module>deployment-transformer</module>
         <module>galleon-content</module>
+        <module>testsuite/kitchensink</module>
         <module>wildfly-feature-pack</module>
     </modules>
 	
