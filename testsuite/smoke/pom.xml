@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2020 Red Hat, Inc. and/or its affiliates
+    and other contributors as indicated by the @author tags.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-deployment-transformer-testsuite</artifactId>
+        <version>1.0.0.Alpha1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>wildfly-deployment-transformer-smoke-tests</artifactId>
+    <name>EE 8 to EE 9 deployment transformation for WildFly -- Smoke Tests</name>
+    <description>Smoke tests of the EE 8 to EE 9 deployment transformation feature pack</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-deployment-transformer-feature-pack</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-deployment-transformer-kitchensink-ear</artifactId>
+            <type>ear</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5-fluent</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-dmr</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-controller-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-core-test-runner</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>                
+        <plugins>
+
+            <!-- Provision traditional unzipped server installations -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <log-provisioning-time>${galleon.log.time}</log-provisioning-time>
+                    <offline-provisioning>${galleon.offline}</offline-provisioning>
+                    <record-provisioning-state>true</record-provisioning-state>
+                    <galleon-options>
+                        <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                    </galleon-options>
+                </configuration>
+                <executions>
+                    <!-- Provision a full installation -->
+                    <execution>
+                        <id>default-provisioning</id>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <provisioning-dir>${project.build.directory}/wildfly-complete</provisioning-dir>
+                            <feature-packs>
+                                <feature-pack>
+                                    <location>${testsuite.galleon.pack.groupId}:${testsuite.galleon.pack.artifactId}:${testsuite.galleon.pack.version}</location>
+                                    <included-packages>
+                                        <name>docs.examples.configs</name>
+                                    </included-packages>
+                                </feature-pack>
+                                <feature-pack>
+                                    <location>${project.groupId}:wildfly-deployment-transformer-feature-pack:${project.version}</location>
+                                </feature-pack>
+                            </feature-packs>
+                        </configuration>
+                    </execution>
+                    <!-- Provision a server using layers -->
+                    <execution>
+                        <id>layers-provisioning</id>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <galleon-options combine.children="append">
+                                <optional-packages>passive+</optional-packages>
+                            </galleon-options>
+                            <provisioning-dir>${project.build.directory}/wildfly-layers</provisioning-dir>
+                            <feature-packs>
+                                <feature-pack>
+                                    <location>${testsuite.galleon.pack.groupId}:${testsuite.galleon.pack.artifactId}:${testsuite.galleon.pack.version}</location>
+                                    <inherit-configs>false</inherit-configs>
+                                    <inherit-packages>false</inherit-packages>
+                                </feature-pack>
+                                <feature-pack>
+                                    <location>${project.groupId}:wildfly-deployment-transformer-feature-pack:${project.version}</location>
+                                </feature-pack>
+                            </feature-packs>
+                            <layers>
+                                <layer>jaxrs-server</layer>
+                                <layer>h2-default-datasource</layer>
+                                <layer>jsf</layer>
+                                <layer>ejb-lite</layer>
+                            </layers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Provision bootable jars -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-jar-maven-plugin</artifactId>
+                <configuration>
+                    <hollow-jar>true</hollow-jar>
+                    <plugin-options>
+                        <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                    </plugin-options>
+                </configuration>
+                <executions>
+                    <!-- Provision a bootable jar with standalone-full.xml content -->
+                    <execution>
+                        <id>build-bootable-jar-default</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <!-- TODO move back to 'compile' when https://issues.redhat.com/browse/WFLY-17505 is resolved -->
+                        <phase>none</phase>
+                        <configuration>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>${testsuite.galleon.pack.groupId}</groupId>
+                                    <artifactId>${testsuite.galleon.pack.artifactId}</artifactId>
+                                    <version>${testsuite.galleon.pack.version}</version>
+                                    <included-default-config>standalone-full.xml</included-default-config>
+                                </feature-pack>
+                                <feature-pack>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>wildfly-deployment-transformer-feature-pack</artifactId>
+                                    <version>${project.version}</version>
+                                </feature-pack>
+                            </feature-packs>
+                            <bootableJarBuildArtifacts>build-default-artifacts</bootableJarBuildArtifacts>
+                            <output-file-name>bootable-default.jar</output-file-name>
+                        </configuration>
+                    </execution>
+                    <!-- Provision a bootable jar using layers -->
+                    <execution>
+                        <id>build-bootable-jar-layers</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>${testsuite.galleon.pack.groupId}</groupId>
+                                    <artifactId>${testsuite.galleon.pack.artifactId}</artifactId>
+                                    <version>${testsuite.galleon.pack.version}</version>
+                                </feature-pack>
+                                <feature-pack>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>wildfly-deployment-transformer-feature-pack</artifactId>
+                                    <version>${project.version}</version>
+                                </feature-pack>
+                            </feature-packs>
+                            <layers>
+                                <layer>jaxrs-server</layer>
+                                <layer>h2-default-datasource</layer>
+                                <layer>jsf</layer>
+                                <layer>ejb-lite</layer>
+                            </layers>
+                            <bootableJarBuildArtifacts>build-layers-artifacts</bootableJarBuildArtifacts>
+                            <output-file-name>bootable-layers.jar</output-file-name>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <configuration>
+                            <!-- Tell the test where the installations are and where there deployment is -->
+                            <systemPropertyVariables>
+                                <test.installation.directory>${project.build.directory}</test.installation.directory>
+                                <test.ear.path>${project.basedir}/../kitchensink/ear/target/wildfly-deployment-transformer-kitchensink.ear</test.ear.path>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

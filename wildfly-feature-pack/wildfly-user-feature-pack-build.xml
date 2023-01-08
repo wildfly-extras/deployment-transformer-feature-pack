@@ -24,7 +24,7 @@
     <dependencies>
         <dependency group-id="org.wildfly" artifact-id="wildfly-ee-galleon-pack">
             <name>org.wildfly:wildfly-ee-galleon-pack</name>
-            <packages inherit="false"/>
+            <packages inherit="true"/>
             <default-configs inherit="false"/>
         </dependency>
     </dependencies>

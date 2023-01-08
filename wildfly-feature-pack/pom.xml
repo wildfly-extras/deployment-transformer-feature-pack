@@ -99,6 +99,7 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
+                            <release-name>WildFly Full</release-name>
                             <config-dir>${project.build.directory}</config-dir>
                             <resources-dir>${basedir}/target/resources</resources-dir>
                         </configuration>

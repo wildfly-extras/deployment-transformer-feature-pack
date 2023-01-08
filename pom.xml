@@ -61,8 +61,21 @@
         <version.org.wildfly>27.0.0.Final</version.org.wildfly>
         <version.org.wildfly.core>19.0.0.Final</version.org.wildfly.core>
         <version.org.wildfly.galleon-plugins>6.2.2.Final</version.org.wildfly.galleon-plugins>
+
+        <!-- Test dependency versions -->
+        <version.junit.junit>4.13.2</version.junit.junit>
+        <version.org.apache.httpcomponents>5.2.1</version.org.apache.httpcomponents>
+        <version.org.jboss.jboss-dmr>1.6.1.Final</version.org.jboss.jboss-dmr>
+        <version.org.jsoup.jsoup>1.15.3</version.org.jsoup.jsoup>
+        <!-- The versions for BOMs, Dependencies and Plugins -->
+        <version.server.bom>26.1.1.Final</version.server.bom>
+        <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
+        <version.org.wildfly.plugins.wildfly-jar-maven-plugin>8.1.0.Final</version.org.wildfly.plugins.wildfly-jar-maven-plugin>
+        <version.org.wildfly.plugins.wildfly-maven-plugin>4.0.0.Final</version.org.wildfly.plugins.wildfly-maven-plugin>
+        <version.org.wildfly.test>27.0.1.Final</version.org.wildfly.test>
     </properties>
-	
+
+    <!-- NOTE: Only include production code build dependencies here; use testsuite/pom.xml for test dependencies -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -127,7 +140,7 @@
     <modules>
         <module>deployment-transformer</module>
         <module>galleon-content</module>
-        <module>testsuite/kitchensink</module>
+        <module>testsuite</module>
         <module>wildfly-feature-pack</module>
     </modules>
 	
