@@ -22,7 +22,7 @@
         <artifactId>jboss-parent</artifactId>
         <version>39</version>
     </parent>
-    <groupId>org.wildfly</groupId>
+    <groupId>org.wildfly.deployment</groupId>
     <artifactId>wildfly-deployment-transformer-parent</artifactId>
     <version>1.0.0.Alpha1-SNAPSHOT</version>
     <packaging>pom</packaging>
