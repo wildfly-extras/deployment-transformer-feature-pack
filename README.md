@@ -28,7 +28,7 @@ Resources:
 * [Galleon documentation](https://docs.wildfly.org/galleon/)
 
 
-## Galleon Feature-Pack Compatible with Stadard WildFly
+## Galleon Feature-Pack Compatible with Standard WildFly
 
 The Maven coordinate to use is: `org.wildfly:wildfly-deployment-transformer-feature-pack`
 
