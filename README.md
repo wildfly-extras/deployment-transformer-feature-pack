@@ -13,10 +13,15 @@ server makes a copy of the deployment for internal use, and no such copy is made
 
 This functionality has been part of WildFly Preview since its first release. This feature pack allows the same functionality to be added to standard WildFly.
 
-Note that this deployment transformation does not detect or attempt to fix any EE API usage that is no longer supported or behaves differently
+---
+**NOTE About Jakarta EE 10**
+
+This deployment transformation does not detect or attempt to fix any EE API usage that is no longer supported or behaves differently
 in Jakarta EE 10. WildFly 27 and later support EE 10. EE 10 differs from EE 8 in more than just the javax to jakarta package rename. It includes
 a number of other API changes, largely consisting of the removal of long-deprecated API. Applications that rely on APIs that were removed in EE 10
 will need to have their source code migrated.
+
+---
 
 There is no configuration (e.g. settings in standalone.xml) associated with this capability. If the module provisioned by this feature-pack is on the module path, the capability will be used.
 
