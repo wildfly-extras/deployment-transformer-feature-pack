@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wildfly.deployment</groupId>
         <artifactId>wildfly-deployment-transformer-parent</artifactId>
-        <version>1.0.0.Final-SNAPSHOT</version>
+        <version>1.0.0.Final</version>
     </parent>
     <artifactId>wildfly-deployment-transformer-galleon-content</artifactId>
     <packaging>pom</packaging>
