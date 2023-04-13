@@ -1,43 +1,44 @@
 # Galleon Feature-Pack for Integrating a Jakarta EE 8 to EE 9 Deployment Transformation Capability into a WildFly Installation.
 
 This feature-pack provides a JBoss Modules module that allows WildFly to analyze the bytecode and other resources of any 
-managed deployment looking for use of Jakarta EE 8 APIs. If found, the copy of the deployment content stored in the server's internal
-deployment content repository is bytecode transformed to instead use the Jakarta EE 9 APIs. Jakarta EE 8 and EE 9 have equivalent APIs,
-except for the change of all package names from javax.* to jakarta.*. 
+[managed deployment](https://docs.wildfly.org/27/Admin_Guide.html#managed-and-unmanaged-deployments) looking for use of Jakarta EE 8 APIs. If found, the copy of the deployment content stored in the server's internal deployment content repository is bytecode transformed to instead use the Jakarta EE 9 APIs. Jakarta EE 8 and EE 9 have equivalent APIs,
+except for the change of all package names from `javax.*` to `jakarta.*`. 
 
-The transformation happens once, when the content is stored in the content repository. 
+The transformation happens once, when the content is stored in the internal content repository. 
 The original content that was provided to the server is not changed. This includes war, ear or jar files placed in the WildFly `deployments` directory.
-
-"Unmanaged" deployments (for example an exploded deployment in the `deployments` directory) are not transformed. The transformation happens when the
-server makes a copy of the deployment for internal use, and no such copy is made for unmanaged deployments.
 
 This functionality has been part of WildFly Preview since its first release. This feature pack allows the same functionality to be added to standard WildFly.
 
-Note that this deployment transformation does not detect or attempt to fix any EE API usage that is no longer supported or behaves differently
-in Jakarta EE 10. WildFly 27 and later support EE 10. EE 10 differs from EE 8 in more than just the javax to jakarta package rename. It includes
-a number of other API changes, largely consisting of the removal of long-deprecated API. Applications that rely on APIs that were removed in EE 10
-will need to have their source code migrated.
-
 There is no configuration (e.g. settings in standalone.xml) associated with this capability. If the module provisioned by this feature-pack is on the module path, the capability will be used.
 
-The deployment-transformer Galleon feature-pack is to be provisioned along with the WildFly Galleon feature-pack.
+The deployment-transformer Galleon feature-pack is to be provisioned along with the WildFly Galleon feature-pack. The Maven coordinate to use is: `org.wildfly:wildfly-deployment-transformer-feature-pack`.
 
 Resources:
 
-* [WildFly Installation Guide](https://docs.wildfly.org/27/#installation-guides)
-* [Galleon documentation](https://docs.wildfly.org/galleon/)
+- [WildFly Installation Guide](https://docs.wildfly.org/27/#installation-guides)
+- [Galleon documentation](https://docs.wildfly.org/galleon/)
 
+## Caveats
 
-## Galleon Feature-Pack Compatible with Standard WildFly
+- This feature pack is meant to provide a temporary aid in a user's transition of their applications to the `jakarta.*` namespace. Users are encouraged to update their applications to natively use the EE 10 APIs.
 
-The Maven coordinate to use is: `org.wildfly:wildfly-deployment-transformer-feature-pack`
+-  The deployment transformation does not detect or attempt to fix any EE API usage that is no longer supported or behaves differently
+in Jakarta EE 10. WildFly 27 and later support EE 10. **EE 10 differs from EE 8 in more than just the `javax` to `jakarta` package rename.** It includes
+a number of other API changes, largely consisting of the removal of long-deprecated API. Applications that rely on APIs that were removed in EE 10
+will need to have their source code migrated.
 
-## No Galleon Feature-Pack Compatible with WildFly Preview
+- ["Unmanaged" deployments](https://docs.wildfly.org/27/Admin_Guide.html#managed-and-unmanaged-deployments) (for example an exploded deployment in the `deployments` directory) are not transformed. The transformation happens when the
+server makes a copy of the deployment for internal use, and no such copy is made for unmanaged deployments.
 
-WildFly Preview includes EE 8 to EE 9 deployment transformation functionality out of the box; therefore this project does not produce a feature pack for use with WildFly Preview. 
-If this out of the box functionality is ever removed from WildFly Preview, an additional feature pack for WildFly Preview will be added here.
+- The transformation is only applied to managed deployment content. It is not a general transformation utility for all resources used in a WildFly runtime. Specifically, **it does not transform libraries or other resources packaged in JBoss Modules modules**, including any module dynamically generated from content in an [`ee` subsystem global directory resource](https://docs.wildfly.org/27/Admin_Guide.html#global-directory). If your WildFly installation uses JBoss Modules modules that depend on Jakarta EE 8 APIs, you have three options:
 
-# Using the Deployment Transformer Galleon Feature-Pack
+    - Update your modules to use artifacts that natively use the Jakarta EE 10 APIs.
+    - Use a tool like the [Eclipse Transformer](https://github.com/eclipse/transformer) to transform your `javax` resources, and then use those transformed resources in your module.
+    - Instead of using a module, incorporate the module resources inside your deployment archives, allowing the functionality added by this feature pack to transform those resources.
+
+- WildFly Preview includes EE 8 to EE 9 deployment transformation functionality out of the box; therefore this project does not produce a feature pack for use with WildFly Preview. If this out of the box functionality is ever removed from WildFly Preview, an additional feature pack for WildFly Preview will be added here.
+
+# Using the Deployment Transformer Feature-Pack
 
 Provisioning of the deployment-transformer capability can be done in multiple ways according to the provisioning tooling in use.
 
