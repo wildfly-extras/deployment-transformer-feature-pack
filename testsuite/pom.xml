@@ -33,7 +33,7 @@
         <!-- Galleon provisioning settings -->
         <galleon.fork.embedded>true</galleon.fork.embedded>
         <galleon.log.time>true</galleon.log.time>
-        <galleon.offline>true</galleon.offline>
+        <galleon.offline>false</galleon.offline>
 
         <!-- Feature pack to use for provisioning the base server -->
         <testsuite.galleon.pack.groupId>org.wildfly</testsuite.galleon.pack.groupId>
