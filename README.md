@@ -13,7 +13,7 @@ There is no configuration (e.g. settings in standalone.xml) associated with this
 
 Highly verbose logging about the transformation can be obtained by setting the log level for the `org.wildfly.ee8to9.transformer` category to TRACE. For example, using the WildFly CLI:
 
-    `/subsystem=logging/logger=org.wildfly.ee8to9.transformer:add(level=TRACE)`
+    /subsystem=logging/logger=org.wildfly.ee8to9.transformer:add(level=TRACE)
 
 The deployment-transformer Galleon feature-pack is to be provisioned along with the WildFly Galleon feature-pack. The Maven coordinate to use is: `org.wildfly:wildfly-deployment-transformer-feature-pack`.
 
