@@ -60,7 +60,7 @@
         <version.org.apache.maven.plugins.maven-assembly-plugin>3.2.0</version.org.apache.maven.plugins.maven-assembly-plugin>
         <version.org.wildfly>27.0.0.Final</version.org.wildfly>
         <version.org.wildfly.core>19.0.0.Final</version.org.wildfly.core>
-        <version.org.wildfly.galleon-plugins>6.2.2.Final</version.org.wildfly.galleon-plugins>
+        <version.org.wildfly.galleon-plugins>6.5.4.Final</version.org.wildfly.galleon-plugins>
 
         <!-- Test dependency versions -->
         <version.junit.junit>4.13.2</version.junit.junit>
@@ -70,8 +70,8 @@
         <!-- The versions for BOMs, Dependencies and Plugins -->
         <version.server.bom>26.1.1.Final</version.server.bom>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
-        <version.org.wildfly.plugins.wildfly-jar-maven-plugin>8.1.0.Final</version.org.wildfly.plugins.wildfly-jar-maven-plugin>
-        <version.org.wildfly.plugins.wildfly-maven-plugin>4.0.0.Final</version.org.wildfly.plugins.wildfly-maven-plugin>
+        <version.org.wildfly.plugins.wildfly-jar-maven-plugin>10.0.0.Final</version.org.wildfly.plugins.wildfly-jar-maven-plugin>
+        <version.org.wildfly.plugins.wildfly-maven-plugin>4.2.1.Final</version.org.wildfly.plugins.wildfly-maven-plugin>
         <version.org.wildfly.test>27.0.1.Final</version.org.wildfly.test>
     </properties>
 
