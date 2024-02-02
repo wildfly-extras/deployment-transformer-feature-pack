@@ -24,7 +24,7 @@ Resources:
 
 ## Caveats
 
-- This feature pack is meant to provide a temporary aid in a user's transition of their applications to the `jakarta.*` namespace. Users are encouraged to update their applications to natively use the EE 10 APIs.
+- This feature pack is meant to provide a temporary aid in the early stage of a user's transition of their applications to the `jakarta.*` namespace. Users are encouraged to update their applications to natively use the EE 10 APIs.
 
 -  The deployment transformation does not detect or attempt to fix any EE API usage that is no longer supported or behaves differently
 in Jakarta EE 10. WildFly 27 and later support EE 10. **EE 10 differs from EE 8 in more than just the `javax` to `jakarta` package rename.** It includes
@@ -33,6 +33,8 @@ will need to have their source code migrated.
 
 - ["Unmanaged" deployments](https://docs.wildfly.org/27/Admin_Guide.html#managed-and-unmanaged-deployments) (for example an exploded deployment in the `deployments` directory) are not transformed. The transformation happens when the
 server makes a copy of the deployment for internal use, and no such copy is made for unmanaged deployments.
+
+- Signed deployments (or subdeployments within ear deployments) will _very_ likely not work. If the transformer alters the deployment content this will invalidate the signatures, and the transformed deployment will fail to deploy.
 
 - The transformation is only applied to managed deployment content. It is not a general transformation utility for all resources used in a WildFly runtime. Specifically, **it does not transform libraries or other resources packaged in JBoss Modules modules**, including any module dynamically generated from content in an [`ee` subsystem global directory resource](https://docs.wildfly.org/27/Admin_Guide.html#global-directory). If your WildFly installation uses JBoss Modules modules that depend on Jakarta EE 8 APIs, you have three options:
 
