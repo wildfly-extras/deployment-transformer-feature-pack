@@ -35,7 +35,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.wildfly.galleon-plugins</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>transformer</artifactId>
          </dependency>
     </dependencies>

@@ -50,4 +50,4 @@ hs_err_pid*.log
 # ignore the build metadata created by the build metadata plugin
 build.metadata
 
-
+transformer/dependency-reduced-pom.xml

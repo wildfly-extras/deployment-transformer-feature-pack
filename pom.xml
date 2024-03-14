@@ -70,6 +70,7 @@
         <!-- The versions for BOMs, Dependencies and Plugins -->
         <version.server.bom>26.1.1.Final</version.server.bom>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
+        <version.org.wildfly.extras.batavia>1.0.12.Final</version.org.wildfly.extras.batavia>
         <version.org.wildfly.plugins.wildfly-jar-maven-plugin>10.0.0.Final</version.org.wildfly.plugins.wildfly-jar-maven-plugin>
         <version.org.wildfly.plugins.wildfly-maven-plugin>4.2.1.Final</version.org.wildfly.plugins.wildfly-maven-plugin>
         <version.org.wildfly.test>27.0.1.Final</version.org.wildfly.test>
@@ -102,11 +103,20 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
-                <groupId>org.wildfly.galleon-plugins</groupId>
+              <groupId>org.wildfly.extras.batavia</groupId>
+              <artifactId>transformer-api</artifactId>
+              <version>${version.org.wildfly.extras.batavia}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.wildfly.extras.batavia</groupId>
+              <artifactId>transformer-impl-eclipse</artifactId>
+              <version>${version.org.wildfly.extras.batavia}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>transformer</artifactId>
-                <version>${version.org.wildfly.galleon-plugins}</version>
+                <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>*</groupId>
@@ -141,6 +151,7 @@
         <module>deployment-transformer</module>
         <module>galleon-content</module>
         <module>testsuite</module>
+        <module>transformer</module>
         <module>wildfly-feature-pack</module>
     </modules>
 	
