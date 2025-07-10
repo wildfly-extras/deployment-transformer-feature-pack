@@ -45,7 +45,10 @@
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 
         <!-- Nexus deployment settings -->
+        <version.gpg.plugin>3.2.8</version.gpg.plugin>
+        <nexus.serverId>jboss</nexus.serverId>
         <nexus.repo.name>wildfly-extras-staging</nexus.repo.name>
+        <nexus.repo.url>https://repository.jboss.org/nexus3</nexus.repo.url>
         <nexus.destination.repo.name>wildfly-extras</nexus.destination.repo.name>
         <nexus.staging.tag>deployment-transformer-feature-pack-${project.version}</nexus.staging.tag>
 
@@ -173,6 +176,129 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <!-- Temporarily override the jboss-parent jboss-release profile
+             to add configuration related to Nexus 3 deployment. These
+             are expected to come in a later jboss-parent release -->
+        <!-- TODO remove this content when it is included in jboss-parent -->
+        <profile>
+            <id>jboss-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nxrm3-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>nexus-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>gpg-sign</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Use this profile in combination with 'jboss-release' to use
+             the nxrm3-maven-plugin's 'staging-deploy' goal instead of its
+             'deploy' goal. Once the staged deployment is valdated, the
+             person or script doing the release  would move on to use
+             its 'staging-move' goal via a call to
+             'mvn nxrm3:staging-move -Pjboss-staging-move' -->
+        <!-- TODO remove this content when it is included in jboss-parent -->
+        <profile>
+            <id>jboss-staging-deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nxrm3-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Disable the jboss-release profile's 'deploy' goal execution -->
+                            <execution>
+                                <id>nexus-deploy</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>nexus-staging.deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>staging-deploy</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${nexus.staging.tag}</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Used in release workflows that use the 'jboss-staging-deploy' profile,
+             this profile configures the nxrm3-maven-plugin to support command
+             line execution of its 'staging-move' goal. -->
+        <!-- TODO remove this content when it is included in jboss-parent -->
+        <profile>
+            <id>jboss-staging-move</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nxrm3-maven-plugin</artifactId>
+                        <configuration>
+                            <destinationRepository>${nexus.destination.repo.name}</destinationRepository>
+                            <tag>${nexus.staging.tag}</tag>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Used in release workflows that use the 'jboss-staging-deploy' profile,
+             this profile configures the nxrm3-maven-plugin to support command
+             line execution of its 'staging-delete' goal. -->
+        <!-- TODO remove this content when it is included in jboss-parent -->
+        <profile>
+            <id>jboss-staging-delete</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nxrm3-maven-plugin</artifactId>
+                        <configuration>
+                            <tag>${nexus.staging.tag}</tag>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <releases>
