@@ -17,6 +17,17 @@
     <name>EE 8 to EE 9 deployment transformation for WildFly -- Parent</name>
   
     <description>Parent pom for producing a Galleon feature pack for including a Jakarta EE 8 to EE 9 deployment transformation capability into a WildFly installation.</description>
+    <url>https://github.com/wildfly-extras/deployment-transformer-feature-pack</url>
+
+    <developers>
+        <developer>
+            <id>bstansberry</id>
+            <name>Brian Stansberry</name>
+            <url>https://github.com/bstansberry</url>
+            <organization>IBM</organization>
+            <organizationUrl>https://www.ibm.com</organizationUrl>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
@@ -25,14 +36,14 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-	
+
     <scm>
         <connection>scm:git:${wildfly-extras.repo.scm.connection}</connection>
         <developerConnection>scm:git:${wildfly-extras.repo.scm.connection}</developerConnection>
         <url>${wildfly-extras.repo.scm.url}</url>
         <tag>HEAD</tag>
     </scm>
-	
+
     <properties>
         <!-- Require Java 11 -->
         <maven.compiler.target>11</maven.compiler.target>
@@ -125,14 +136,14 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-			
+            
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wildfly-deployment-transformer-galleon-content</artifactId>
                 <type>pom</type>
                 <version>${project.version}</version>
             </dependency>
-			
+            
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wildfly-ee-9-deployment-transformer</artifactId>
@@ -144,10 +155,10 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-			
+            
         </dependencies>
     </dependencyManagement>
-	
+    
     <modules>
         <module>deployment-transformer</module>
         <module>galleon-content</module>
@@ -155,7 +166,7 @@
         <module>transformer</module>
         <module>wildfly-feature-pack</module>
     </modules>
-	
+    
     <build>
         <plugins>
             <plugin>
