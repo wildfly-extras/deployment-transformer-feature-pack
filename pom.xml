@@ -39,8 +39,8 @@
         <maven.compiler.source>11</maven.compiler.source>
 
         <!-- TODO Change the github org to wildfly-extras once repo ownership is transferred -->
-        <wildfly-extras.repo.scm.connection>git@github.com:bstansberry/deployment-transformer-feature-pack.git</wildfly-extras.repo.scm.connection>
-        <wildfly-extras.repo.scm.url>https://github.com/bstansberry/deployment-transformer-feature-pack</wildfly-extras.repo.scm.url>
+        <wildfly-extras.repo.scm.connection>git@github.com:wildfly-extras/deployment-transformer-feature-pack.git</wildfly-extras.repo.scm.connection>
+        <wildfly-extras.repo.scm.url>https://github.com/wildfly-extras/deployment-transformer-feature-pack</wildfly-extras.repo.scm.url>
 
         <!-- maven-gpg-plugin -->
         <!-- set this to "error" to require a GPG agent-->
