@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.wildfly.deployment</groupId>
         <artifactId>wildfly-deployment-transformer-parent</artifactId>
-        <version>2.0.1.Final-SNAPSHOT</version>
+        <version>2.0.1.Alpha2</version>
     </parent>
     <artifactId>wildfly-deployment-transformer-feature-pack</artifactId>
     <packaging>pom</packaging>
