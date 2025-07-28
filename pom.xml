@@ -63,7 +63,7 @@
         <version.gpg.plugin>3.2.8</version.gpg.plugin>
         <version.nxrm3.plugin>1.0.7</version.nxrm3.plugin>
         <nexus.serverId>jboss</nexus.serverId>
-        <nexus.repository.release>releases</nexus.repository.release>
+        <nexus.repository.release>wildfly-extras</nexus.repository.release>
         <nexus.repository.staging>wildfly-extras-staging</nexus.repository.staging>
         <nexus.repository.url>https://repository.jboss.org/nexus/</nexus.repository.url>
         <nexus.staging.tag>deployment-transformer-feature-pack-${project.version}</nexus.staging.tag>
