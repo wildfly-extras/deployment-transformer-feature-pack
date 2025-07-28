@@ -109,6 +109,13 @@
                     <artifactId>wildfly-jar-maven-plugin</artifactId>
                     <version>${version.org.wildfly.plugins.wildfly-jar-maven-plugin}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nxrm3-maven-plugin</artifactId>
+                    <configuration>
+                        <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
