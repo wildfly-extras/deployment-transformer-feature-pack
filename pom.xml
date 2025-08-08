@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>49</version>
+        <version>50.beta1</version>
     </parent>
     <groupId>org.wildfly.deployment</groupId>
     <artifactId>wildfly-deployment-transformer-parent</artifactId>
@@ -49,23 +49,14 @@
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
 
-        <!-- TODO Change the github org to wildfly-extras once repo ownership is transferred -->
         <wildfly-extras.repo.scm.connection>git@github.com:wildfly-extras/deployment-transformer-feature-pack.git</wildfly-extras.repo.scm.connection>
         <wildfly-extras.repo.scm.url>https://github.com/wildfly-extras/deployment-transformer-feature-pack</wildfly-extras.repo.scm.url>
-
-        <!-- maven-gpg-plugin -->
-        <!-- set this to "error" to require a GPG agent-->
-        <gpg.pinEntryMode>loopback</gpg.pinEntryMode>
 
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
 
         <!-- Nexus deployment settings -->
-        <version.gpg.plugin>3.2.8</version.gpg.plugin>
-        <version.nxrm3.plugin>1.0.7</version.nxrm3.plugin>
-        <nexus.serverId>jboss</nexus.serverId>
         <nexus.repository.release>wildfly-extras</nexus.repository.release>
         <nexus.repository.staging>wildfly-extras-staging</nexus.repository.staging>
-        <nexus.repository.url>https://repository.jboss.org/nexus/</nexus.repository.url>
         <nexus.staging.tag>deployment-transformer-feature-pack-${project.version}</nexus.staging.tag>
 
         <!-- Production code dependency versions -->
@@ -216,67 +207,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <!-- Temporarily override the jboss-parent jboss-release profile
-             to add configuration related to Nexus 3 deployment. These
-             are expected to come in a later jboss-parent release -->
-        <!-- TODO remove this content when it is included in jboss-parent -->
-        <profile>
-            <id>jboss-release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-deploy</id>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nxrm3-maven-plugin</artifactId>
-                        <extensions>true</extensions>
-                        <executions>
-                            <execution>
-                                <id>nexus-deploy</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>staging-deploy</goal>
-                                </goals>
-                                <configuration>
-                                    <repository>${nexus.repository.staging}</repository>
-                                    <tag>${nexus.staging.tag}</tag>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <configuration>
-                            <useAgent>true</useAgent>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>${gpg.pinEntryMode}</arg>
-                            </gpgArguments>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>gpg-sign</id>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <repositories>
         <repository>
