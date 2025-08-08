@@ -1,4 +1,7 @@
-# Galleon Feature-Pack for Integrating a Jakarta EE 8 to EE 9 Deployment Transformation Capability into a WildFly Installation.
+Jakarta EE 8 to EE 9 Deployment Transformation in WildFly
+========================================================
+
+This project produces a Galleon feature pack that allows you to add a Jakarta EE 8 to EE 9 deployment transformation capability to a WildFly installation.
 
 This feature-pack provides a JBoss Modules module that allows WildFly to analyze the bytecode and other resources of any 
 [managed deployment](https://docs.wildfly.org/27/Admin_Guide.html#managed-and-unmanaged-deployments) looking for use of Jakarta EE 8 APIs. If found, the copy of the deployment content stored in the server's internal deployment content repository is bytecode transformed to instead use the Jakarta EE 9 APIs. Jakarta EE 8 and EE 9 have equivalent APIs,
@@ -15,11 +18,11 @@ Highly verbose logging about the transformation can be obtained by setting the l
 
     /subsystem=logging/logger=org.wildfly.ee8to9.transformer:add(level=TRACE)
 
-The deployment-transformer Galleon feature-pack is to be provisioned along with the WildFly Galleon feature-pack. The Maven coordinate to use is: `org.wildfly:wildfly-deployment-transformer-feature-pack`.
+The deployment-transformer Galleon feature-pack is to be provisioned along with the WildFly Galleon feature-pack. The Maven coordinate to use is: `org.wildfly.deployment:wildfly-deployment-transformer-feature-pack`.
 
 Resources:
 
-- [WildFly Installation Guide](https://docs.wildfly.org/27/#installation-guides)
+- [WildFly Installation Guide](https://docs.wildfly.org/37/#installation-guides)
 - [Galleon documentation](https://docs.wildfly.org/galleon/)
 
 ## Caveats
@@ -31,7 +34,7 @@ in Jakarta EE 10. WildFly 27 and later support EE 10. **EE 10 differs from EE 8 
 a number of other API changes, largely consisting of the removal of long-deprecated API. Applications that rely on APIs that were removed in EE 10
 will need to have their source code migrated.
 
-- ["Unmanaged" deployments](https://docs.wildfly.org/27/Admin_Guide.html#managed-and-unmanaged-deployments) (for example an exploded deployment in the `deployments` directory) are not transformed. The transformation happens when the
+- ["Unmanaged" deployments](https://docs.wildfly.org/37/Admin_Guide.html#managed-and-unmanaged-deployments) (for example an exploded deployment in the `deployments` directory) are not transformed. The transformation happens when the
 server makes a copy of the deployment for internal use, and no such copy is made for unmanaged deployments.
 
 - Signed deployments (or subdeployments within ear deployments) will _very_ likely not work. If the transformer alters the deployment content this will invalidate the signatures, and the transformed deployment will fail to deploy.
@@ -50,18 +53,18 @@ Provisioning of the deployment-transformer capability can be done in multiple wa
 
 ## Provisioning Using the Galleon CLI Tool
 
-You can download the latest Galleon CLI tool from the Galleon github project [releases](https://github.com/wildfly/galleon/releases).
+You can download the latest Galleon CLI tool from the Galleon project on GitHub [releases](https://github.com/wildfly/galleon/releases).
  
 You need to define a Galleon provisioning configuration file such as:
 
 ```
 <?xml version="1.0" ?>
 <installation xmlns="urn:jboss:galleon:provisioning:3.0">
-  <feature-pack location="org.wildfly:wildfly-galleon-pack:27.0.1.Final">
+  <feature-pack location="org.wildfly:wildfly-galleon-pack:37.0.0.Final">
     <default-configs inherit="false"/>
     <packages inherit="false"/>
   </feature-pack>
-  <feature-pack location="org.wildfly:wildfly-wildfly-deployment-transformer-feature-pack:1.0.0.Alpha1">
+  <feature-pack location="org.wildfly.deployment:wildfly-deployment-transformer-feature-pack:2.0.0.Final">
     <default-configs inherit="false"/>
     <packages inherit="false"/>
   </feature-pack>
@@ -87,8 +90,8 @@ If you wish to provision everything included in a standard WildFly distribution,
 ````
 <?xml version="1.0" ?>
 <installation xmlns="urn:jboss:galleon:provisioning:3.0">
-  <feature-pack location="org.wildfly:wildfly-galleon-pack:27.0.1.Final"/>
-  <feature-pack location="org.wildfly:wildfly-wildfly-deployment-transformer-feature-pack:1.0.0.Alpha1"/>
+  <feature-pack location="org.wildfly:wildfly-galleon-pack:37.0.0.Final"/>
+  <feature-pack location="org.wildfly.deployment:wildfly-deployment-transformer-feature-pack:2.0.0.Final"/>
 </installation>
 ````
 
@@ -101,7 +104,7 @@ The WildFly project provides Maven plugins that allow you to provision tradition
 * For a bootable jar, use the [WildFly JAR Maven plugin](https://docs.wildfly.org/bootablejar/).
 
 The details of how to configure these plugins is beyond the scope of this document; see the plugin documentation linked above for further details. However, both have similar configuration blocks for their mojos used for provisioning. In both, 
-you need to include the deployment-transformer feature-pack in the Maven Plugin configuration.along with the feature-pack declaration for the standard WildFly feature-pack.
+you need to include the deployment-transformer feature-pack in the Maven Plugin configuration, along with the feature-pack declaration for the standard WildFly feature-pack.
 
 This looks like:
 
@@ -109,10 +112,10 @@ This looks like:
 ...
 <feature-packs>
   <feature-pack>
-    <location>org.wildfly:wildfly-galleon-pack:27.0.1.Final</location>
+    <location>org.wildfly:wildfly-galleon-pack:37.0.0.Final</location>
   </feature-pack>
   <feature-pack>
-    <location>org.wildfly:wildfly-wildfly-deployment-transformer-feature-pack:1.0.0.Alpha1</location>
+    <location>org.wildfly.deployment:wildfly-deployment-transformer-feature-pack:2.0.0.Final</location>
   </feature-pack>
 </feature-packs>
 <layers>
